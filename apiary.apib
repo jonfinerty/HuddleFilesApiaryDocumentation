@@ -104,7 +104,7 @@ Additionally, Last-Modified is included in the response to indicate the last tim
 + Request JSON
     + Headers
 
-            Accept: application/vnd.huddle.data+xml
+            Accept: application/vnd.huddle.data+json
             Authorization: OAuth2 frootymcnooty/vonbootycherooty
             If-Modified-Since: Thu, 04 Dec 1986 12:34:56 GMT
 
@@ -415,29 +415,6 @@ The user then updates the @title and @description attributes in the editable doc
 
 If a document with the same title and the same extension already exists within the folder, you will receive a 409 Conflict.
 
-+ Parameters
-    + documentId (integer) ... ID of the document.
-
-+ Request
-    + Headers
-
-            Authorization: OAuth2 frootymcnooty/vonbootycherooty
-            Content-Type: application/vnd.huddle.data+xml
-            Content-Length: 102
-
-    + Body
-
-            <document xmlns="http://schema.huddle.net/2011/02/" title="new title" description="new description" >
-                <link rel="parent" href="..." />
-            </document>
-
-+ Response 204
-    + Headers
-
-            Link: .../files/documents/123;rel="parent"
-
-### Moving Document [PUT]
-
 This resource supports moving a document to a new location. If the authenticated user can move a document, the document resource will advertise a link with a @rel of move. Note that the @href of this link is the same as the @href for editing a document, since a move is actually an edit operation. To move a document, PUT a new link to this move uri, with a @rel value of parent, and an @href value pointing to the new parent folder.
 
 The client should follow the link header and perform a GET. When the 'processingStatus' element is equal to 'Moving' it means that the operation is still ongoing. When the operation is completed the 'processingStatus' element assumes the value 'Complete'. While the document is moving it's not possible to download its content, and a 409 Conflict will be returned if a client attempts to do so.
@@ -455,10 +432,10 @@ The client should follow the link header and perform a GET. When the 'processing
     + Body
 
             <document xmlns="http://schema.huddle.net/2011/02/" title="new title" description="new description" >
-                <link rel="parent" href=".../files/folder/3" />
+                <link rel="parent" href="..." />
             </document>
 
-+ Response 204
++ Response 204 (application/vnd.huddle.data+xml)
     + Headers
 
             Link: .../files/documents/123;rel="parent"
@@ -477,9 +454,9 @@ The client should follow the link header and perform a GET. When the 'processing
 
 # Group Recents
 
-## [/files/users/{userId}/recentitems]
+## Recent Items [/files/users/{userId}/recentitems]
 
-### Retrieve Recent Items
+### Retrieve Recent Items [GET]
 
 The maximum number of recent items is 50 with subsequent entries resulting in the earliest entries moving off the list.
 
@@ -541,7 +518,7 @@ Please Note:
 + Request JSON
     + Headers
 
-            Accept: application/vnd.huddle.data+xml
+            Accept: application/vnd.huddle.data+json
             Authorization: OAuth2 frootymcnooty/vonbootycherooty
 
 
@@ -603,7 +580,95 @@ Please Note:
               ]
             }
 
+### Add Recent Item [POST]
+
+A file is added to a user's recent list by POSTing to the relevant endpoint. A limited amount of state must be POSTed by clients to populate the list with pertinent information.
+
+As such any retrieved data may be out of date. Resources may exist on the list that the user no longer has access to. A GET against the document resource will both return the right state and whether the user still has access.
+
+POSTing a file incldues the date in the payload. The list will then be sorted on that list. An item that already exists on the list will result in a 201 result, with the file sorted in the list according to the date posted and the existing entries on the list.
+
++ Parameters
+    + userId (integer) ... ID of the current user.
+
++ Request XML
+    + Headers
+
+            Accept: application/vnd.huddle.data+xml
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
             
+    + Body
+    
+            <recentitem>
+              <type>Document</type>
+              <link rel="self" href="..."/>
+              <title>a very important text file</title>
+              <contenttype>text/plain</contenttype>
+              <workspacetitle>a very important workspace</workspacetitle>
+              <dateaddedutc>2014-10-23T12:08:02Z</dateaddedutc>
+            </recentitem>
+
+
++ Response 201 (application/vnd.huddle.data+xml)
+
+    + Headers
+
+            Location: ...
+
+
++ Request JSON
+    
+    + Headers
+
+            Accept: application/vnd.huddle.data+json
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+            
+    + Body
+    
+            {
+              "link": [{
+                  "rel": "self",
+                  "href": "..."
+              }],
+              "type":"document",
+              "title": "a very important text file",
+              "contenttype": "text/plain",
+              "workspacetitle": "a very important workspace"
+              "dateaddedutc": "2014-10-23T12:08:02Z"
+            }
+
+
++ Response 201 (application/vnd.huddle.data+json)
+
+    + Headers
+
+            Location: ...
+
+## Recent Item [/files/users/{userId}/recentitems/{documentId}]
+
+### Delete Recent Item [DELETE]
+
+A Document can be removed from a User's recent file list by issuing a DELETE against the User's Recent Items API
+
++ Parameters
+    + userId (integer) ... ID of the current user.
+    + documentId (integer) ... ID of the document in the user's recent item list.
+
++ Request XML
+    + Headers
+
+            Accept: application/vnd.huddle.data+xml
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+
++ Response 204 (application/vnd.huddle.data+xml)
+
++ Request JSON
+    + Headers
+
+            Accept: application/vnd.huddle.data+json
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+
++ Response 204 (application/vnd.huddle.data+json)
 
 # Group Changes
 
