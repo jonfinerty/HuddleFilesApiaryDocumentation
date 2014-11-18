@@ -1,0 +1,303 @@
+FORMAT: 1A
+HOST: http://api.huddle.net/
+
+# Huddle Files
+
+Huddle is platform for secure external collaboration. For more details on the product, visit http://www.huddle.com/product-overview/ 
+
+This is the documentation for the files-related APIs that Huddle provides.
+
+For site wide API standards and conventions see: [INSERT LINK TO OVERALL API DOCS]
+
+# Group Documents
+Documents represent files stored within Huddle, such as spreadsheets or images. Documents also have metadata for version history and commenting.
+
+## Document [/files/documents/{documentId}]
+### Retrieve a Document [GET]
+
+When retrieving a folder, the response will contain the list of documents within the folder. Each document will advertise a self link, which you can use to GET the full document.
+
+An If-Modified-Since header can be specified in the Request header to indicate that only if there are changes to the Document resource since the specified time should they be sent.
+
+Additionally, Last-Modified is included in the response to indicate the last time the Document resource was generated.
+
++ Parameters
+    + documentId (integer) ... ID of the document.
+
++ Request
+    + Headers
+
+            Accept: application/vnd.huddle.data+xml
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+            If-Modified-Since: Thu, 04 Dec 1986 12:34:56 GMT
+
+
++ Response 200 (application/vnd.huddle.data+xml)
+
+    + Headers
+        
+            Last-Modified: Thu, 04 Dec 1986 12:34:56 GMT
+        
+    + Body
+
+            <document title="TPS report May 2010" description="relentlessly mundane and enervating.">
+              <link rel="self" href="..." />
+              <link rel="parent" href="..." title="..."/>
+              <link rel="edit" href="..." />
+              <link rel="move" href="..." />
+              <link rel="delete" href="..." />
+              <link rel="content" href="..." title="..." type="..." />
+              <link rel="lock" href="..." />
+              <link rel="version-history" href="..." />
+              <link rel="create-version" href="..." />
+              <link rel="comments" href="..." count="2" />
+              <link rel="approvals" href="..." />
+              <link rel="permissions" href="..." />
+              <link rel="share" href="..." />
+              <link rel="previews" href="..." />
+              <link rel="alternate" href="..." />
+              <link rel="alternate" href="..." type="text/html" />
+              <link rel="shortlink" href="..." type="text/html" />
+              <link rel="copy" href="..." />
+              <link rel="audittrail" href="..." />
+              <link rel="printed" href="..." />
+              <link rel="make-offline" href="..." />
+              <link rel="publish" href="..." />
+              <link rel="publications" href="..." />
+              <actor name="Peter Gibson" email="peter.gibson@example.com" rel="owner">
+                <link rel="self" href="..." />
+                <link rel="avatar" href="..." type="image/jpg" />
+                <link rel="alternate" href="..." type="text/html" />
+              </actor>
+              <actor name="Barry Potter" email="barry.potter@example.com" rel="updated-by">
+                <link rel="self" href="..." />
+                <link rel="avatar" href="..." type="image/jpg" />
+                <link rel="alternate" href="..." type="text/html" />
+              </actor>
+              <size>19475</size>
+              <version>98</version>
+              <created>2007-10-10T09:02:17Z</created>
+              <updated>2011-10-10T09:02:17Z</updated>
+              <processingStatus>Complete</processingStatus>
+              <views>9</views>
+              <workspace title="My workspace">
+                <link rel="self" href="..." />
+              </workspace>
+              <thumbnails>
+                <thumbnail type=”medium”>
+                  <link rel="content" href="..." />
+                </thumbnail>
+              </thumbnails>
+              <publication>
+                <link rel="bookmark" href="..." />
+                <publishedDate>2014-06-15T09:43:17Z</publishedDate>
+                <documentVersion title="My amazing document is amazing">
+                   <link rel="self" href="..." />
+                   <version>2</version>
+                   <contentType>application/pdf</contentType>
+                </documentVersion>
+                <scope>Public</scope>
+              </publication>
+            </document>
+
+### Deleting a Document [DELETE]
+This resource supports deleting a document. If the authenticated user can delete a document, the document resource will advertise a link with @rel value of delete. To delete the document, issue a DELETE request to the delete URI.
+
++ Parameters
+    + documentId (integer) ... ID of the document.
+
++ Request
+    + Headers
+
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+
++ Response 200
+    + Headers
+        
+            Link: .../files/folders/123;rel="parent"
+
+
+## Document Content [/files/documents/{documentId}/content{?wasGetImplicit}]
+### Download Document Content [GET]
+
+Documents have binary content associated with them. If a document has binary content, it will advertise a link with a @rel value of content. To download the content, GET the URI advertised in the link. The @title attribute of the link will give the filename of the document, and the @type attribute will give the mime-type.
+
+If a document has multiple versions the content link will point to the content of the latest active version, which will be a version that is not deleted and has had content uploaded to it successfully.
+
+A 204 HTTP No Content response will be returned from this endpoint in the case where the document has no binary content.
+
+The endpoint accepts an optional query string argument, wasGetImplicit, to signify the download is implicit, i.e. the associated user did not expressly choose to download the content. For example - the client application is caching / pre-fetching ahead of explicit use. If not specified, the flag will be assumed false. When set the flag ensures a different Activity entry is logged - DocumentDownloadedImplicit rather than DocumentDownloaded.
+
++ Parameters
+    + documentId (integer) ... ID of the document.
+    + wasGetImplicit (optional, boolean) ... Signifies the download is implicit, i.e. the associated user did not expressly choose to download the content.
+
++ Request
+    + Headers
+
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+
++ Response 200
+    + Headers
+        
+            Content-Type: text/plain
+            Content-Length: 198
+            Content-Disposition: attachment; filename="filename.txt"
+        
+    + Body
+            
+            Hello - this is the content of your text file. You uploaded it to Huddle to keep it safe and secure, but now it has been used in an API example by a bad developer and so everybody can see it. Oh no!
+
+
+## Document Thumbnails [/files/documents/{documentId}/thumbnail/medium/content]
+### Download Document Thumbnail [GET]
+For certain file types, a thumbnail is automatically and asynchronously created when the file is uploaded. This includes the most common image and video MIME types.
+
+If the document version’s MIME type is supported, the Get Document response body will include a "thumbnails" element containing a "thumbnail" child element, which contains a link with a @rel value of content. A GET request to the thumbnail content URI will return the thumbnail content.
+
+If a thumbnail is not available, a 404 will be returned.
+
++ Parameters
+    + documentId (integer) ... ID of the document.
+
++ Request
+    + Headers
+
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+
++ Response 200
+    + Headers
+        
+            Cache-Control: private, max-age=600
+            Content-Type: image/jpeg
+            Content-Length: 930
+        
+    + Body
+            
+            A stream that makes up the image...
+
+## Restoring Documents [/files/documents/{documentId}/restore]
+### Restoring a Document [PUT]
+This resource supports restoring a document. If the authenticated user can restore a document, /restore can be appended to the document resource URI to restore URI. To restore the document, issue a PUT request to the restore URI.
+
+If successful, this operation will return a 204 No content, with a link header giving the location of the restored document.
+
+This response uses the standard error codes and returns standard response headers.
+
++ Parameters
+    + documentId (integer) ... ID of the document.
+
++ Request
+    + Headers
+
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+
++ Response 204
+    + Headers
+        
+            Location: /files/documents/{documentId}
+
+## Editing a Document [/files/document/{documentId}/edit]
+
+### Retrieve Editable Document Metadata [GET]
+
+If the authenticated user is authorized to edit a document, it will advertise a link with a @rel value of edit. To update document metadata submit a PUT request to this URI with the editable fields of the document. For an overview of editing resource in Huddle see editing resources.
+
++ Parameters
+    + documentId (integer) ... ID of the document.
+
++ Request
+    + Headers
+
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+            Accept: application/vnd.huddle.data+xml
+
++ Response 200
+    + Headers
+        
+            Content-Type: application/vnd.huddle.data+xml
+
+    + Body
+            
+            <document title="old title" description="old description">
+                <link rel="parent" href="..." />
+            </document>
+
+
+### Updating Document Title and Description or Moving Document [PUT]
+
+The user then updates the @title and @description attributes in the editable document resource and PUTs it back to the server.
+
+If a document with the same title and the same extension already exists within the folder, you will receive a 409 Conflict.
+
++ Parameters
+    + documentId (integer) ... ID of the document.
+
++ Request
+    + Headers
+
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+            Content-Type: application/vnd.huddle.data+xml
+            Content-Length: 102
+            
+    + Body
+    
+            <document xmlns="http://schema.huddle.net/2011/02/" title="new title" description="new description" >
+                <link rel="parent" href="..." />
+            </document>
+
++ Response 204
+    + Headers
+        
+            Link: .../files/documents/123;rel="parent"
+
+
+### Moving Document [PUT]
+
+This resource supports moving a document to a new location. If the authenticated user can move a document, the document resource will advertise a link with a @rel of move. Note that the @href of this link is the same as the @href for editing a document, since a move is actually an edit operation. To move a document, PUT a new link to this move uri, with a @rel value of parent, and an @href value pointing to the new parent folder.
+
+The client should follow the link header and perform a GET. When the 'processingStatus' element is equal to 'Moving' it means that the operation is still ongoing. When the operation is completed the 'processingStatus' element assumes the value 'Complete'. While the document is moving it's not possible to download its content, and a 409 Conflict will be returned if a client attempts to do so.
+
++ Parameters
+    + documentId (integer) ... ID of the document.
+
++ Request
+    + Headers
+
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+            Content-Type: application/vnd.huddle.data+xml
+            Content-Length: 102
+            
+    + Body
+    
+            <document xmlns="http://schema.huddle.net/2011/02/" title="new title" description="new description" >
+                <link rel="parent" href=".../files/folder/3" />
+            </document>
+
++ Response 204
+    + Headers
+        
+            Link: .../files/documents/123;rel="parent"
+
+## Copying a Document [/files/document/{documentId}]
+
+### Copying Document [POST]
+
+## Creating a new version of a document [/files/document/{documentId}/version]
+
+### Create Document Metadata for new Version [POST]
+
+### Upload Document Content for new Version [POST]
+
+# Group Comments
+
+# Group Publishing
+
+# Group Approvals
+
+# Group Audit Trail
+
+# Group Sharing
+
+# Group Previews
+
