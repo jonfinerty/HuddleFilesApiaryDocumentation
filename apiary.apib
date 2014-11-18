@@ -477,6 +477,134 @@ The client should follow the link header and perform a GET. When the 'processing
 
 # Group Recents
 
+## [/files/users/{userId}/recentitems]
+
+### Retrieve Recent Items
+
+The maximum number of recent items is 50 with subsequent entries resulting in the earliest entries moving off the list.
+
+The POSTing / GETing of recent items is therefore on a LIFO context - with the last file added by the POST being the first retrieved in the GET.
+
+A user may only access their own recent items list.
+
+Huddle's current IMS-style caching will be used. An If-Modified-Since header can be specified in the request header to indicate that only if there are changes to the requested recent items resource since the specified time should they be sent.
+
+Additionally, Last-Modified is included in the response to indicate the last time the recent items resource changed (i.e. a Document was added or removed from the user's recent file list).
+
+Please Note:
+
+* Data returned by the recent items API does not represent the Huddle catalog of data. This data has been provided by a client of Huddle and is a representation of the document at the moment in time a recent file was added.
+
+* Permissions may have changed, and the document may not be available to the user
+
+* To obtain the true latest state of a document a GET should be performed on the Self URI of that document.
+
++ Parameters
+    + userId (integer) ... ID of the current user.
+
++ Request XML
+    + Headers
+
+            Accept: application/vnd.huddle.data+xml
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+
++ Response 200 (application/vnd.huddle.data+xml)
+
+    + Headers
+
+            Last-Modified: Thu, 14 Oct 2014 11:11:11 GMT
+
+    + Body
+
+            <recentitems>
+              <link rel="self" href="..." />
+              <maxItems>50</maxItems>
+              <recentitem type="Document">
+                <link rel="delete" href="..." />
+                <link rel="self" href="..." />
+                <title="A recent file document 1 title">
+                <contenttype>text/plain</contenttype>
+                <workspacetitle>"The parent workspace for document 1" />
+                <dateaddedutc>2014-12-23T01:33:44Z />
+              </recentitem>
+              <recentitem type="document">
+                <link rel="delete" href="..." />
+                <link rel="self" href="..." />
+                <title="A recent file document 2 title">
+                <contenttype>text/plain</contenttype>
+                <workspacetitle>"The parent workspace for document 2" />
+                <dateaddedutc>2014-12-24T11:21:27Z />
+              </recentitem>
+            </recentitems>
+
+
++ Request JSON
+    + Headers
+
+            Accept: application/vnd.huddle.data+xml
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+
+
++ Response 200 (application/vnd.huddle.data+json)
+
+    + Headers
+
+            Last-Modified: Thu, 04 Dec 1986 12:34:56 GMT
+
+    + Body
+    
+            {
+              "links": [
+                {
+                  "rel": "self",
+                  "href": "..."
+                }
+              ],
+              "maxItems": 50,
+              "items": [
+                {
+                  "type": "Document",
+                  "links": [
+                    {
+                      "rel": "delete",
+                      "href": "..."
+                    },
+                    {
+                      "rel": "self",
+                      "href": "..."
+                    }
+                  ],
+                  "title": "A recent file document 1 title",
+                  "workspacetitletitle": "The parent workspace for document 1",
+                  "contenttype": "text/plain",
+                  "dateaddedutc": "2015-02-28T10:01:06Z"
+                },
+                {
+                  "type": "document",
+                  "links": [
+                    {
+                      "rel": "delete",
+                      "href": "..."
+                    }
+                  ],
+                  "document": {
+                    "title": "A recent file document 2 title",
+                    "links": [
+                      {
+                        "rel": "self",
+                        "href": "..."
+                      }
+                    ],
+                    "workspacetitle": {
+                      "title": "The parent workspace for document 2"
+                    }
+                  }
+                }
+              ]
+            }
+
+            
+
 # Group Changes
 
 # Group Audit Trail
@@ -498,8 +626,6 @@ The client should follow the link header and perform a GET. When the 'processing
 # Group Publishing
 
 # Group Approvals
-
-# Group Audit Trail
 
 # Group Sharing
 
