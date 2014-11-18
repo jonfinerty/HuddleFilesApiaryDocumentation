@@ -24,15 +24,89 @@ Additionally, Last-Modified is included in the response to indicate the last tim
 + Parameters
     + documentId (integer) ... ID of the document.
 
-+ Request
++ Request XML
     + Headers
 
             Accept: application/vnd.huddle.data+xml
             Authorization: OAuth2 frootymcnooty/vonbootycherooty
             If-Modified-Since: Thu, 04 Dec 1986 12:34:56 GMT
 
++ Request JSON
+    + Headers
+
+            Accept: application/vnd.huddle.data+xml
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+            If-Modified-Since: Thu, 04 Dec 1986 12:34:56 GMT
 
 + Response 200 (application/vnd.huddle.data+xml)
+
+    + Headers
+        
+            Last-Modified: Thu, 04 Dec 1986 12:34:56 GMT
+        
+    + Body
+
+            <document title="TPS report May 2010" description="relentlessly mundane and enervating.">
+              <link rel="self" href="..." />
+              <link rel="parent" href="..." title="..."/>
+              <link rel="edit" href="..." />
+              <link rel="move" href="..." />
+              <link rel="delete" href="..." />
+              <link rel="content" href="..." title="..." type="..." />
+              <link rel="lock" href="..." />
+              <link rel="version-history" href="..." />
+              <link rel="create-version" href="..." />
+              <link rel="comments" href="..." count="2" />
+              <link rel="approvals" href="..." />
+              <link rel="permissions" href="..." />
+              <link rel="share" href="..." />
+              <link rel="previews" href="..." />
+              <link rel="alternate" href="..." />
+              <link rel="alternate" href="..." type="text/html" />
+              <link rel="shortlink" href="..." type="text/html" />
+              <link rel="copy" href="..." />
+              <link rel="audittrail" href="..." />
+              <link rel="printed" href="..." />
+              <link rel="make-offline" href="..." />
+              <link rel="publish" href="..." />
+              <link rel="publications" href="..." />
+              <actor name="Peter Gibson" email="peter.gibson@example.com" rel="owner">
+                <link rel="self" href="..." />
+                <link rel="avatar" href="..." type="image/jpg" />
+                <link rel="alternate" href="..." type="text/html" />
+              </actor>
+              <actor name="Barry Potter" email="barry.potter@example.com" rel="updated-by">
+                <link rel="self" href="..." />
+                <link rel="avatar" href="..." type="image/jpg" />
+                <link rel="alternate" href="..." type="text/html" />
+              </actor>
+              <size>19475</size>
+              <version>98</version>
+              <created>2007-10-10T09:02:17Z</created>
+              <updated>2011-10-10T09:02:17Z</updated>
+              <processingStatus>Complete</processingStatus>
+              <views>9</views>
+              <workspace title="My workspace">
+                <link rel="self" href="..." />
+              </workspace>
+              <thumbnails>
+                <thumbnail type=”medium”>
+                  <link rel="content" href="..." />
+                </thumbnail>
+              </thumbnails>
+              <publication>
+                <link rel="bookmark" href="..." />
+                <publishedDate>2014-06-15T09:43:17Z</publishedDate>
+                <documentVersion title="My amazing document is amazing">
+                   <link rel="self" href="..." />
+                   <version>2</version>
+                   <contentType>application/pdf</contentType>
+                </documentVersion>
+                <scope>Public</scope>
+              </publication>
+            </document>
+            
++ Response 200 (application/vnd.huddle.data+json)
 
     + Headers
         
