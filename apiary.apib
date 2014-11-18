@@ -17,7 +17,190 @@ Folders in Huddle are conceptually similar to folders on a hard drive in that fo
 
 Access controls can be set on a folder to allow different groups of people to read, write, and delete those documents.
 
-## Root Folder [/files/workspaces/{workspaceId}/folders/root]
+## Root Folder [/files/workspaces/{workspaceId}/folders/root{?projection}]
+
+This resource allows a user to retrieve the root folder of a workspace. The response is the same as when you issue a GET for a folder. The optional projections described for retrieving a folder are also valid for retrieving a root folder.
+
+### Retrieve a root Folder [GET]
+
++ Parameters
+    + workspaceId (integer) ... ID of a workspace.
+    + projection (optional, string) ... Optional projections, supported values are `permissions`, `ancestry` and `subfolderChildCount`, these can be combined with comma-seperation.
+
++ Request XML
+    + Headers
+
+            Accept: application/vnd.huddle.data+xml
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+
++ Response 200 (application/vnd.huddle.data+xml)
+
+    + Headers
+
+            Last-Modified: Tue, 1 Feb 2011 13:18:42 GMT
+
+    + Body
+    
+            <folder xmlns="https://schema.huddle.net/2011/02/" title="My folder" displayName="My folder" description="Folder description">
+                <link rel="self" href="files/folders/12345" />
+                <link rel="parent" href="..." />
+                <link rel="delete" href="..." />
+                <link rel="bulk-delete" href="..." />
+                <link rel="bulk-move" href="..." />
+                <link rel="bulk-download" href="..." />
+                <link rel="edit" href="..." />
+                <link rel="move" href="..." />
+                <link rel="create-folder" href="..." />
+                <link rel="create-document" href="..." />
+                <link rel="permissions" href="..." />
+                <link rel="editPermissions" href="..." />
+                <link rel="workspace-summary" href="..." />
+                <link rel="share" href="..." />
+                <link rel="copy" href="..." />
+                <link rel="document-library-settings" href="..." />
+                <actor name="Ian Cooper" email="ian.cooper@example.com" rel="owner">
+                    <link rel="self" href="..." />
+                    <link rel="avatar" href="..." />
+                    <link rel="alternate" href="..." type="text/html" />
+                </actor>
+                <folders>
+                    <folder title="sub folder" description="my subfolder">
+                        <link rel="self" href="files/folders/12345" />
+                        <link rel="parent" href="..." />
+                        <link rel="delete" href="..." />
+                        <link rel="bulk-delete" href="..." />
+                        <link rel="bulk-move" href="..." />
+                        <link rel="bulk-download" href="..." />
+                        <link rel="edit" href="..." />
+                        <link rel="move" href="..." />
+                        <link rel="create-folder" href="..." />
+                        <link rel="create-document" href="..." />
+                        <link rel="permissions" href="..." />
+                        <link rel="editPermissions" href="..." />
+                        <link rel="workspace-summary" href="..." />
+                        <link rel="share" href="..." />
+                        <link rel="copy" href="..." />
+                        <link rel="document-library-settings" href="..." />
+                        <updated>2014-09-22T08:25:43Z</updated>
+                        <created>2014-09-22T08:25:43Z</created>
+                    </folder>
+                </folders>
+              <documents>
+                <document title="title" description="document description">
+                    <link rel="self" href="..." />
+                    <link rel="version-history" href="..." />
+                    <link rel="comments" href="..." count="0" />
+                    <link rel="approvals" href="..." />
+                    <link rel="permissions" href="..." />
+                    <link rel="share" href="..." />
+                    <link rel="audittrail" href="..." />
+                    <link rel="printed" href="..." />
+                    <link rel="bulk-delete" href="..." />
+                    <link rel="previews" href="..." />
+                    <link rel="alternate" href="..." />
+                    <link rel="alternate" href="..." type="text/html" />
+                    <link rel="shortlink" href="..." type="text/html" />
+                    <link rel="content" href="..." type="image/png" title="title.PNG" />
+                    <link rel="parent" href="..." title="My folder" />
+                    <link rel="edit" href="..." />
+                    <link rel="create-version" href="..." />
+                    <link rel="lock" href="..." />
+                    <link rel="delete" href="..." />
+                    <link rel="move" href="..." />
+                    <link rel="copy" href="..." />
+                </document>
+              </documents>
+              <created>2007-10-10T09:02:17Z</created>
+              <updated>2007-01-01T00:02:03Z</updated>
+            </folder>
+
++ Request JSON
+    
+    + Headers
+
+            Accept: application/vnd.huddle.data+json
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+
++ Response 200 (application/vnd.huddle.data+json)
+
+    + Headers
+
+            Last-Modified: Tue, 1 Feb 2011 13:18:42 GMT
+
+    + Body
+    
+            <folder xmlns="https://schema.huddle.net/2011/02/" title="My folder" displayName="My folder" description="Folder description">
+                <link rel="self" href="files/folders/12345" />
+                <link rel="parent" href="..." />
+                <link rel="delete" href="..." />
+                <link rel="bulk-delete" href="..." />
+                <link rel="bulk-move" href="..." />
+                <link rel="bulk-download" href="..." />
+                <link rel="edit" href="..." />
+                <link rel="move" href="..." />
+                <link rel="create-folder" href="..." />
+                <link rel="create-document" href="..." />
+                <link rel="permissions" href="..." />
+                <link rel="editPermissions" href="..." />
+                <link rel="workspace-summary" href="..." />
+                <link rel="share" href="..." />
+                <link rel="copy" href="..." />
+                <link rel="document-library-settings" href="..." />
+                <actor name="Ian Cooper" email="ian.cooper@example.com" rel="owner">
+                    <link rel="self" href="..." />
+                    <link rel="avatar" href="..." />
+                    <link rel="alternate" href="..." type="text/html" />
+                </actor>
+                <folders>
+                    <folder title="sub folder" description="my subfolder">
+                        <link rel="self" href="files/folders/12345" />
+                        <link rel="parent" href="..." />
+                        <link rel="delete" href="..." />
+                        <link rel="bulk-delete" href="..." />
+                        <link rel="bulk-move" href="..." />
+                        <link rel="bulk-download" href="..." />
+                        <link rel="edit" href="..." />
+                        <link rel="move" href="..." />
+                        <link rel="create-folder" href="..." />
+                        <link rel="create-document" href="..." />
+                        <link rel="permissions" href="..." />
+                        <link rel="editPermissions" href="..." />
+                        <link rel="workspace-summary" href="..." />
+                        <link rel="share" href="..." />
+                        <link rel="copy" href="..." />
+                        <link rel="document-library-settings" href="..." />
+                        <updated>2014-09-22T08:25:43Z</updated>
+                        <created>2014-09-22T08:25:43Z</created>
+                    </folder>
+                </folders>
+              <documents>
+                <document title="title" description="document description">
+                    <link rel="self" href="..." />
+                    <link rel="version-history" href="..." />
+                    <link rel="comments" href="..." count="0" />
+                    <link rel="approvals" href="..." />
+                    <link rel="permissions" href="..." />
+                    <link rel="share" href="..." />
+                    <link rel="audittrail" href="..." />
+                    <link rel="printed" href="..." />
+                    <link rel="bulk-delete" href="..." />
+                    <link rel="previews" href="..." />
+                    <link rel="alternate" href="..." />
+                    <link rel="alternate" href="..." type="text/html" />
+                    <link rel="shortlink" href="..." type="text/html" />
+                    <link rel="content" href="..." type="image/png" title="title.PNG" />
+                    <link rel="parent" href="..." title="My folder" />
+                    <link rel="edit" href="..." />
+                    <link rel="create-version" href="..." />
+                    <link rel="lock" href="..." />
+                    <link rel="delete" href="..." />
+                    <link rel="move" href="..." />
+                    <link rel="copy" href="..." />
+                </document>
+              </documents>
+              <created>2007-10-10T09:02:17Z</created>
+              <updated>2007-01-01T00:02:03Z</updated>
+            </folder>
 
 ## Folder [/files/folders/{folderId}]
 
