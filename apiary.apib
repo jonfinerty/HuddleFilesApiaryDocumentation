@@ -1068,7 +1068,7 @@ Responses are paged, you can navigate between pages by following the next and pr
 
 The AuditTrail resource represents a collection of changes made to a specific document resource.
 
-## Document Audit Trails [files/documents/{documentId}/audittrail{?limit}]
+## Document Audit Trails [/files/documents/{documentId}/audittrail{?limit}]
 
 ### Retrieve a Document's Audit Trail [GET]
 
@@ -1277,7 +1277,7 @@ You can specify the maximum number of audit entries you want from the API by spe
                 ]
             }
 
-## Document Printed Audit [files/documents/{documentId}/audittrail/printed]
+## Document Printed Audit [/files/documents/{documentId}/audittrail/printed]
 
 Most change types are automatically added to a document's audit trail, and cannot be manually added. For instance, when a document is created, an ObjectCreated audit entry is automatically added to the document's audit trail as part of the back-end document creation process.
 
@@ -1307,7 +1307,7 @@ If the POST operation is successful, the endpoint will return a 201 Created resp
             Location: ...
 
 
-## Document Printed Audit [files/documents/{documentId}/audittrail/opened]
+## Document Printed Audit [/files/documents/{documentId}/audittrail/opened]
 
 Document opening can be invoked on a disconnected client at a time other than download. For example, a disconnected client could download a lot of content ahead of time (implicit / automatic download) and thereafter a user could consume the Content.
 
@@ -1335,7 +1335,7 @@ If the POST operation is successful, the endpoint will return a 201 Created resp
             Location: ...
 
 
-## Document Viewed Audit [files/documents/{documentId}/audittrail/viewed]
+## Document Viewed Audit [/files/documents/{documentId}/audittrail/viewed]
 
 Similarly to opening, a Document may be viewed on a disconnected client at a time other than download. For example, a disconnected client could download a lot of content ahead of time (implicit / automatic download) and thereafter a user could View the Content.
 
