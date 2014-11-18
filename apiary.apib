@@ -9,7 +9,7 @@ This is the documentation for the files-related APIs that Huddle provides.
 
 For site wide API standards and conventions see: [INSERT LINK TO OVERALL API DOCS]
 
-# Group Folder
+# Group Folders
 
 Folders are used to organise, group, and protect documents that are stored in Huddle.
 
@@ -668,8 +668,6 @@ The client should follow the link header and perform a GET. When the 'processing
 
 ### Upload Document Content for new Version [POST]
 
-
-
 # Group Recents
 
 The Recent Items API is in Beta
@@ -893,6 +891,176 @@ A Document can be removed from a User's recent file list by issuing a DELETE aga
 + Response 204 (application/vnd.huddle.data+json)
 
 # Group Changes
+
+## Changes [/workspaces/{workspaceId}/changes{?pagesize}]
+
+### Retrieve workspace changes list [GET]
+
+When retrieving a workspace, the response will advertise a changes link, which you can use to GET the changes made to the workspace and its children.
+
+Responses are paged, you can navigate between pages by following the next and prev links. The URI advertised by the workspace will always point to the most recent set of changes. The earliest set of changes is advertised by the last link. The most recent changes are available at the first link.
+
++ Parameters
+    + workspaceId (integer) ... ID of workspace.
+    + pagesize (optional, integer) ... Number of elements to return per page, between 50 - 2000. Default: 50.
+
++ Request XML
+    + Headers
+
+            Accept: application/vnd.huddle.data+xml
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+            If-Modified-Since: Sat, 29 Oct 1994 19:43:31 GMT
+
++ Response 200 (application/vnd.huddle.data+xml)
+
+    + Headers
+
+            Last-Modified: Thu, 14 Oct 2014 11:11:11 GMT
+            
+    + Body
+    
+            <changes xmlns="http://schema.huddle.net/2011/02/">
+              <link rel="self" href="..." />
+              <link rel="next" href="..." />
+              <link rel="last" href="..." />
+            
+              <change>
+                <link rel="self" href="..." />
+                <link rel="subject" href="..." />
+                <link rel="workspace" href="..." />
+                <link rel="parent" href="..." />
+                <type>DocumentCheckedOut</type>
+                <actor name="Mrs. Teasdale" email="teasdale@example.com" rel="owner">
+                    <link rel="self" href="..." />
+                    <link rel="avatar" href="..." type="image/jpg" />
+                    <link rel="alternate" href="..." type="text/html" />
+                </actor>
+                <created>2011-02-01T13:18:42Z</created>
+                <correlationId>2345-3567-1234-235566</correlationId>
+              </change>
+            
+              <change>
+                <link rel="self" href="..." />
+                <link rel="subject" href="..." />
+                <link rel="workspace" href="..." />
+                <link rel="parent" href="..." />
+                <type>ObjectCreated</type>
+                <actor name="Rufus T. Firefly" email="rufus.firefly@example.com" rel="owner">
+                    <link rel="self" href="..." />
+                    <link rel="avatar" href="..." type="image/jpg" />
+                    <link rel="alternate" href="..." type="text/html" />
+                </actor>
+                <created>2011-02-01T13:17:42Z</created>
+              </change>
+            </changes>
+
++ Request JSON
+    + Headers
+
+            Accept: application/vnd.huddle.data+json
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+            If-Modified-Since: Sat, 29 Oct 1994 19:43:31 GMT
+
++ Response 200 (application/vnd.huddle.data+json)
+
+    + Headers
+
+            Last-Modified: Thu, 14 Oct 2014 11:11:11 GMT
+            
+    + Body
+    
+            {
+                "links" : [
+                    {
+                        "rel" : "self",
+                        "href" : "..."
+                    }, {
+                        "rel" : "next",
+                        "href" : "..."
+                    }, {
+                        "rel" : "last",
+                        "href" : "..."
+                    }
+                ],
+                "changes" : [
+                    {
+                        "links" : [
+                            {
+                                "rel" : "self",
+                                "href" : "..."
+                            }, {
+                                "rel" : "subject",
+                                "href" : "..."
+                            }, {
+                                "rel" : "workspace",
+                                "href" : "..."
+                            }, {
+                                "rel" : "parent",
+                                "href" : "..."
+                            }
+                        ],
+                        "type" : "DocumentCheckedOut",
+                        "actor" : {
+                            "name" : "Mrs. Teasdale",
+                            "email" : "teasdale@example.com",
+                            "rel" : "owner"
+                            "links" : [
+                                {
+                                    "rel" : "self",
+                                    "href" : "..."
+                                }, {
+                                    "rel" : "avatar",
+                                    "href" : "...",
+                                    "type" : "image/jpg"
+                                }, {
+                                    "rel" : "alternate",
+                                    "href" : "...",
+                                    "type" : "text/html"
+                                }
+                            ]
+                        },
+                        "created" : "2011-02-01T13:18:42Z",
+                        "correlationId" : "2345-3567-1234-235566"
+                    }, {
+                        "links" : [
+                            {
+                                "rel" : "self",
+                                "href" : "..."
+                            }, {
+                                "rel" : "subject",
+                                "href" : "..."
+                            }, {
+                                "rel" : "workspace",
+                                "href" : "..."
+                            }, {
+                                "rel" : "parent",
+                                "href" : "..."
+                            }
+                        ],
+                        "type" : "ObjectCreated",
+                        "actor" : {
+                            "name" : ""Rufus T. Firefly",
+                            "email" : "rufus.firefly@example.com",
+                            "rel" : "owner"
+                            "links" : [
+                                {
+                                    "rel" : "self",
+                                    "href" : "..."
+                                }, {
+                                    "rel" : "avatar",
+                                    "href" : "...",
+                                    "type" : "image/jpg"
+                                }, {
+                                    "rel" : "alternate",
+                                    "href" : "...",
+                                    "type" : "text/html"
+                                }
+                            ]
+                        },
+                        "created" : "2011-02-01T13:18:42Z"
+                    }
+                ]
+            }
 
 # Group Audit Trail
 
