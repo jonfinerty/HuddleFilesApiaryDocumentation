@@ -894,6 +894,8 @@ A Document can be removed from a User's recent file list by issuing a DELETE aga
 
 ## Changes [/workspaces/{workspaceId}/changes{?pagesize}]
 
+Changes represent the list of changes made to an object and its children.
+
 ### Retrieve workspace changes list [GET]
 
 When retrieving a workspace, the response will advertise a changes link, which you can use to GET the changes made to the workspace and its children.
@@ -1039,7 +1041,7 @@ Responses are paged, you can navigate between pages by following the next and pr
                         ],
                         "type" : "ObjectCreated",
                         "actor" : {
-                            "name" : ""Rufus T. Firefly",
+                            "name" : "Rufus T. Firefly",
                             "email" : "rufus.firefly@example.com",
                             "rel" : "owner"
                             "links" : [
@@ -1062,7 +1064,219 @@ Responses are paged, you can navigate between pages by following the next and pr
                 ]
             }
 
-# Group Audit Trail
+# Group Audit Trails
+
+The AuditTrail resource represents a collection of changes made to a specific document resource.
+
+## Document Audit Trails [files/documents/{documentId}/audittrail{?limit=1000}]
+
+### Retrieve a Document's Audit Trail [GET]
+
+If the authenticated user is authorized to view a document, the document resource will advertise a link with @rel value of audittrail. To retrieve the document's audit trail, GET the audittrail URI which will return an AuditTrail resource.
+
+You can specify the maximum number of audit entries you want from the API by specifying a limit query-string parameter, up to a maximum of 5000. (If you exceed the maximum, the API will respond with 400 Bad Request.) The most recent audit entries will be returned. Omitting the query string will result in a default limit of 2000 being applied.
+
+
++ Parameters
+    + workspaceId (integer) ... ID of workspace.
+    + limit (optional, integer) ... The maximum number of audit entries to return.
+
++ Request XML
+    + Headers
+
+            Accept: application/vnd.huddle.data+xml
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+
++ Response 200 (application/vnd.huddle.data+xml)
+
+    + Body
+    
+            <changes xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+              <link rel="self" href=".../files/documents/123/audittrail" />
+              <change>
+                <link rel="self" href=".../files/change-sets/document/123/3" />
+                <link rel="subject" href=".../files/documents/123" />
+                <link rel="workspace" href=".../workspaces/6" />
+                <link rel="parent" href=".../files/folders/99" />
+                <link rel="share-information" href=".../notifications/shares/5df96158-5f6c-4d7f-a716-7877ad92c560" />
+                <type>DocumentShared</type>
+                <actor name="Bob Jones" email="bob.jones@123.com" rel="owner">
+                  <link rel="self" href=".../users/9" />
+                  <link rel="avatar" href=".../files/users/9/avatar" type="image/jpeg" />
+                  <link rel="alternate" href=".../user/bjones" type="text/html" />
+                </actor>
+                <createdDate>2013-05-08T13:52:29</createdDate>
+                <versionNumber>1</versionNumber>
+                <description>30</description>
+              </change>
+              <change>
+                <link rel="self" href=".../files/change-sets/document/123/2" />
+                <link rel="subject" href=".../files/documents/123" />
+                <link rel="workspace" href=".../workspaces/6" />
+                <link rel="parent" href=".../files/folders/99" />
+                <type>DocumentVersionViewed</type>
+                <actor name="Bob Jones" email="bob.jones@123.com" rel="owner">
+                  <link rel="self" href=".../users/9" />
+                  <link rel="avatar" href=".../files/users/9/avatar" type="image/jpeg" />
+                  <link rel="alternate" href=".../user/bjones" type="text/html" />
+                </actor>
+                <createdDate>2013-05-07T10:21:03</createdDate>
+                <versionNumber>1</versionNumber>
+              </change>
+              <change>
+                <link rel="self" href=".../files/change-sets/document/123/1" />
+                <link rel="subject" href=".../files/documents/123" />
+                <link rel="workspace" href=".../workspaces/6" />
+                <link rel="parent" href=".../files/folders/99" />
+                <type>ObjectCreated</type>
+                <actor name="Bob Jones" email="bob.jones@123.com" rel="owner">
+                  <link rel="self" href=".../users/9" />
+                  <link rel="avatar" href=".../files/users/9/avatar" type="image/jpeg" />
+                  <link rel="alternate" href=".../user/bjones" type="text/html" />
+                </actor>
+                <createdDate>2013-05-07T10:20:03</createdDate>
+              </change>
+            </changes>
+
++ Request JSON
+    + Headers
+
+            Accept: application/vnd.huddle.data+json
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+
++ Response 200 (application/vnd.huddle.data+json)
+
+    + Body
+    
+            {
+                "links" : [
+                    {
+                        "rel" : "self",
+                        "href" : "..."
+                    }
+                ],
+                "changes" : [
+                    {
+                        "links" : [
+                            {
+                                "rel" : "self",
+                                "href" : "..."
+                            }, {
+                                "rel" : "subject",
+                                "href" : "..."
+                            }, {
+                                "rel" : "workspace",
+                                "href" : "..."
+                            }, {
+                                "rel" : "parent",
+                                "href" : "..."
+                            }, {
+                                "rel" : "share-information",
+                                "href" : "..."
+                            }
+                        ],
+                        "type" : "DocumentShared",
+                        "actor" : {
+                            "name" : "Bob Jones",
+                            "email" : "bob.jones@123.com",
+                            "rel" : "owner"
+                            "links" : [
+                                {
+                                    "rel" : "self",
+                                    "href" : "..."
+                                }, {
+                                    "rel" : "avatar",
+                                    "href" : "...",
+                                    "type" : "image/jpg"
+                                }, {
+                                    "rel" : "alternate",
+                                    "href" : "...",
+                                    "type" : "text/html"
+                                }
+                            ]
+                        },
+                        "created" : "2011-02-01T13:18:42Z",
+                        "versionNumber" : 1,
+                        "description" : 30
+                    }, {
+                        "links" : [
+                            {
+                                "rel" : "self",
+                                "href" : "..."
+                            }, {
+                                "rel" : "subject",
+                                "href" : "..."
+                            }, {
+                                "rel" : "workspace",
+                                "href" : "..."
+                            }, {
+                                "rel" : "parent",
+                                "href" : "..."
+                            }
+                        ],
+                        "type" : "DocumentVersionViewed",
+                        "actor" : {
+                            "name" : "Bob Jones",
+                            "email" : "bob.jones@123.com",
+                            "rel" : "owner"
+                            "links" : [
+                                {
+                                    "rel" : "self",
+                                    "href" : "..."
+                                }, {
+                                    "rel" : "avatar",
+                                    "href" : "...",
+                                    "type" : "image/jpg"
+                                }, {
+                                    "rel" : "alternate",
+                                    "href" : "...",
+                                    "type" : "text/html"
+                                }
+                            ]
+                        },
+                        "created" : "2011-02-01T13:18:42Z",
+                        "versionNumber" : 1
+                    }, {
+                         "links" : [
+                            {
+                                "rel" : "self",
+                                "href" : "..."
+                            }, {
+                                "rel" : "subject",
+                                "href" : "..."
+                            }, {
+                                "rel" : "workspace",
+                                "href" : "..."
+                            }, {
+                                "rel" : "parent",
+                                "href" : "..."
+                            }
+                        ],
+                        "type" : "ObjectCreated",
+                        "actor" : {
+                            "name" : "Bob Jones",
+                            "email" : "bob.jones@123.com",
+                            "rel" : "owner"
+                            "links" : [
+                                {
+                                    "rel" : "self",
+                                    "href" : "..."
+                                }, {
+                                    "rel" : "avatar",
+                                    "href" : "...",
+                                    "type" : "image/jpg"
+                                }, {
+                                    "rel" : "alternate",
+                                    "href" : "...",
+                                    "type" : "text/html"
+                                }
+                            ]
+                        },
+                        "created" : "2011-02-01T13:18:42Z"
+                    }
+                ]
+            }
+
 
 # Group Bulk Process
 
