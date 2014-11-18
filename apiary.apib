@@ -9,8 +9,43 @@ This is the documentation for the files-related APIs that Huddle provides.
 
 For site wide API standards and conventions see: [INSERT LINK TO OVERALL API DOCS]
 
+# Group Folder
+
+Folders are used to organise, group, and protect documents that are stored in Huddle.
+
+Folders in Huddle are conceptually similar to folders on a hard drive in that folders can contain other folders as well as documents.
+
+Access controls can be set on a folder to allow different groups of people to read, write, and delete those documents.
+
+## Root Folder [/files/workspaces/{workspaceId}/folders/root]
+
+## Folder [/files/folders/{folderId}]
+
+### Create a Subfolder [POST]
+
+### Delete a Folder [DELETE]
+
+## Restore Folder [/files/folders/{folderId}/restore]
+
+### Restoring a Folder
+
+## Edit Folder [/files/folders/{folderId}/edit]
+
+### Retrieve Editable Properties [GET]
+
+### Edit Folder Title, Description and Location [PUT]
+
+## Copy Folder [/files/folders/{folderId}/copy]
+
+### Copy a Folder [POST]
+
+
 # Group Documents
 Documents represent files stored within Huddle, such as spreadsheets or images. Documents also have metadata for version history and commenting.
+
+## Documents [/files/folders/{folderId}/documents]
+
+### Create a Document [POST]
 
 ## Document [/files/documents/{documentId}]
 
@@ -450,9 +485,13 @@ The client should follow the link header and perform a GET. When the 'processing
 
 ### Upload Document Content for new Version [POST]
 
-# Group Folder
+
 
 # Group Recents
+
+The Recent Items API is in Beta
+
+Recent Items APIs provide the ability for a user to easily track Recent Items they have Viewed / worked on using any device. Any file, and can be listed, added to and removed and any device can add to the list.
 
 ## Recent Items [/files/users/{userId}/recentitems]
 
