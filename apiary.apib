@@ -1277,6 +1277,91 @@ You can specify the maximum number of audit entries you want from the API by spe
                 ]
             }
 
+## Document Printed Audit [files/documents/{documentId}/audittrail/printed]
+
+Most change types are automatically added to a document's audit trail, and cannot be manually added. For instance, when a document is created, an ObjectCreated audit entry is automatically added to the document's audit trail as part of the back-end document creation process.
+
+However, there are certain change types that can be explicitly added by the caller. These change types are documented below. If a change type is not listed below, then it cannot be manually added.
+
+### Audit Document Printed [POST]
+
+Document printing is a purely client-side activity, therefore document printed changes must be manually added to a document's audit trail by the caller.
+
+If the authenticated user is authorized to view a document, the Document resource will advertise a link with a @rel value of printed. POSTing to this URI will add a change of type DocumentPrinted to the document's AuditTrail.
+
+If the POST operation is successful, the endpoint will return a 201 Created response, along with the URI of the new change in the Location header.
+
++ Parameters
+    + documentId (integer) ... ID of document.
+
++ Request
+    + Headers
+
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+            Content-Length: 0
+
++ Response 201
+    + Location
+    
+            Content-Length: 0
+            Location: ...
+
+
+## Document Printed Audit [files/documents/{documentId}/audittrail/opened]
+
+Document opening can be invoked on a disconnected client at a time other than download. For example, a disconnected client could download a lot of content ahead of time (implicit / automatic download) and thereafter a user could consume the Content.
+
+Therefore we should provide clients with the ability to specify document opened changes outside of the regular API entries.
+
+If the authenticated user is authorized to view a document, the Document resource will advertise a link with a @rel value of opened. POSTing to this URI will add a change of type DocumentOpened to the document's AuditTrail.
+
+If the POST operation is successful, the endpoint will return a 201 Created response, along with the URI of the new change in the Location header.
+
+### Audit Document Opened [POST]
+
++ Parameters
+    + documentId (integer) ... ID of document.
+
++ Request
+    + Headers
+
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+            Content-Length: 0
+
++ Response 201
+    + Location
+    
+            Content-Length: 0
+            Location: ...
+
+
+## Document Viewed Audit [files/documents/{documentId}/audittrail/viewed]
+
+Similarly to opening, a Document may be viewed on a disconnected client at a time other than download. For example, a disconnected client could download a lot of content ahead of time (implicit / automatic download) and thereafter a user could View the Content.
+
+Therefore we should provide clients with the ability to specify document viewed changes outside of the regular API entries.
+
+If the authenticated user is authorized to view a document, the Document resource will advertise a link with a @rel value of opened. POSTing to this URI will add a change of type DocumentViewed to the document's AuditTrail.
+
+If the POST operation is successful, the endpoint will return a 201 Created response, along with the URI of the new change in the Location header.
+
+### Audit Document Viewed [POST]
+
++ Parameters
+    + documentId (integer) ... ID of document.
+
++ Request
+    + Headers
+
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+            Content-Length: 0
+
++ Response 201
+    + Location
+    
+            Content-Length: 0
+            Location: ...
+
 
 # Group Bulk Process
 
