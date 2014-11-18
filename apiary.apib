@@ -285,7 +285,6 @@ Additionally, Last-Modified is included in the response to indicate the last tim
                 }
             }
             
-
 ### Deleting a Document [DELETE]
 This resource supports deleting a document. If the authenticated user can delete a document, the document resource will advertise a link with @rel value of delete. To delete the document, issue a DELETE request to the delete URI.
 
@@ -302,8 +301,8 @@ This resource supports deleting a document. If the authenticated user can delete
 
             Link: .../files/folders/123;rel="parent"
 
-
 ## Document Content [/files/documents/{documentId}/content{?wasGetImplicit}]
+
 ### Download Document Content [GET]
 
 Documents have binary content associated with them. If a document has binary content, it will advertise a link with a @rel value of content. To download the content, GET the URI advertised in the link. The @title attribute of the link will give the filename of the document, and the @type attribute will give the mime-type.
@@ -334,8 +333,8 @@ The endpoint accepts an optional query string argument, wasGetImplicit, to signi
 
             Hello - this is the content of your text file. You uploaded it to Huddle to keep it safe and secure, but now it has been used in an API example by a bad developer and so everybody can see it. Oh no!
 
-
 ## Document Thumbnails [/files/documents/{documentId}/thumbnail/medium/content]
+
 ### Download Document Thumbnail [GET]
 For certain file types, a thumbnail is automatically and asynchronously created when the file is uploaded. This includes the most common image and video MIME types.
 
@@ -363,6 +362,7 @@ If a thumbnail is not available, a 404 will be returned.
             A stream that makes up the image...
 
 ## Restoring Documents [/files/documents/{documentId}/restore]
+
 ### Restoring a Document [PUT]
 This resource supports restoring a document. If the authenticated user can restore a document, /restore can be appended to the document resource URI to restore URI. To restore the document, issue a PUT request to the restore URI.
 
@@ -409,7 +409,6 @@ If the authenticated user is authorized to edit a document, it will advertise a 
                 <link rel="parent" href="..." />
             </document>
 
-
 ### Updating Document Title and Description or Moving Document [PUT]
 
 The user then updates the @title and @description attributes in the editable document resource and PUTs it back to the server.
@@ -436,7 +435,6 @@ If a document with the same title and the same extension already exists within t
     + Headers
 
             Link: .../files/documents/123;rel="parent"
-
 
 ### Moving Document [PUT]
 
@@ -475,6 +473,26 @@ The client should follow the link header and perform a GET. When the 'processing
 
 ### Upload Document Content for new Version [POST]
 
+# Group Folder
+
+# Group Recents
+
+# Group Changes
+
+# Group Audit Trail
+
+# Group Bulk Process
+
+# Group Document Library Settings
+
+# Group Locks
+
+# Group Offline Item
+
+# Group Permissions
+
+# Group Share
+
 # Group Comments
 
 # Group Publishing
@@ -487,3 +505,6 @@ The client should follow the link header and perform a GET. When the 'processing
 
 # Group Previews
 
+# Group Versions
+
+# Group Byte Range Requests
