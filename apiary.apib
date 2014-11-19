@@ -344,33 +344,1089 @@ This resource allows a user to retrieve the root folder of a workspace. The resp
                 "updated" : "2007-10-10T09:02:17Z"
             }
 
-## Folder [/files/folders/{folderId}]
+## Folder [/files/folders/{folderId}{?projection}]
+
+### Retrieve a Folder [GET]
+
+The top level folder in any workspace is returned as part of a Workspace. You can navigate the folder hierarchy by following the links returned in the folder structure.
+
+An If-Modified-Since header can be specified in the Request header to indicate that only if there are changes to the Folder resource since the specified time should they be sent.
+
+Additionally, Last-Modified is included in the response to indicate the last time the Folder resource was generated.
+
+The root folder element contains a displayName attribute, as well as a title. In most cases, these will be the same; however, if the folder being retrieved is the document library (i.e. root) folder in the workspace, the displayName attribute's value will match the name of the workspace, which is generally more appropriate than "documentlibrary" for display purposes. Please note that this is a read-only property, and including a displayName attribute in any PUT or POST requests will have no effect.
+
+
++ Parameters
+    + folderId (integer) ... ID of a folder.
+    + projection (optional, string) ... Optional projections, supported values are `permissions`, `ancestry` and `subfolderChildCount`, these can be combined with comma-seperation.
+
++ Request XML
+    + Headers
+
+            Accept: application/vnd.huddle.data+xml
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+
++ Response 200 (application/vnd.huddle.data+xml)
+
+    + Headers
+
+            Last-Modified: Tue, 1 Feb 2011 13:18:42 GMT
+
+    + Body
+    
+            <folder xmlns="https://schema.huddle.net/2011/02/" title="My folder" displayName="My folder" description="Folder description">
+                <link rel="self" href="files/folders/12345" />
+                <link rel="parent" href="..." />
+                <link rel="delete" href="..." />
+                <link rel="bulk-delete" href="..." />
+                <link rel="bulk-move" href="..." />
+                <link rel="bulk-download" href="..." />
+                <link rel="edit" href="..." />
+                <link rel="move" href="..." />
+                <link rel="create-folder" href="..." />
+                <link rel="create-document" href="..." />
+                <link rel="permissions" href="..." />
+                <link rel="editPermissions" href="..." />
+                <link rel="workspace-summary" href="..." />
+                <link rel="share" href="..." />
+                <link rel="copy" href="..." />
+                <link rel="document-library-settings" href="..." />
+                <actor name="Ian Cooper" email="ian.cooper@example.com" rel="owner">
+                    <link rel="self" href="..." />
+                    <link rel="avatar" href="..." />
+                    <link rel="alternate" href="..." type="text/html" />
+                </actor>
+                <folders>
+                    <folder title="sub folder" description="my subfolder">
+                        <link rel="self" href="files/folders/12345" />
+                        <link rel="parent" href="..." />
+                        <link rel="delete" href="..." />
+                        <link rel="bulk-delete" href="..." />
+                        <link rel="bulk-move" href="..." />
+                        <link rel="bulk-download" href="..." />
+                        <link rel="edit" href="..." />
+                        <link rel="move" href="..." />
+                        <link rel="create-folder" href="..." />
+                        <link rel="create-document" href="..." />
+                        <link rel="permissions" href="..." />
+                        <link rel="editPermissions" href="..." />
+                        <link rel="workspace-summary" href="..." />
+                        <link rel="share" href="..." />
+                        <link rel="copy" href="..." />
+                        <link rel="document-library-settings" href="..." />
+                        <updated>2014-09-22T08:25:43Z</updated>
+                        <created>2014-09-22T08:25:43Z</created>
+                    </folder>
+                </folders>
+              <documents>
+                <document title="title" description="document description">
+                    <link rel="self" href="..." />
+                    <link rel="version-history" href="..." />
+                    <link rel="comments" href="..." count="0" />
+                    <link rel="approvals" href="..." />
+                    <link rel="permissions" href="..." />
+                    <link rel="share" href="..." />
+                    <link rel="audittrail" href="..." />
+                    <link rel="printed" href="..." />
+                    <link rel="bulk-delete" href="..." />
+                    <link rel="previews" href="..." />
+                    <link rel="alternate" href="..." />
+                    <link rel="alternate" href="..." type="text/html" />
+                    <link rel="shortlink" href="..." type="text/html" />
+                    <link rel="content" href="..." type="image/png" title="title.PNG" />
+                    <link rel="parent" href="..." title="My folder" />
+                    <link rel="edit" href="..." />
+                    <link rel="create-version" href="..." />
+                    <link rel="lock" href="..." />
+                    <link rel="delete" href="..." />
+                    <link rel="move" href="..." />
+                    <link rel="copy" href="..." />
+                </document>
+              </documents>
+              <created>2007-10-10T09:02:17Z</created>
+              <updated>2007-01-01T00:02:03Z</updated>
+            </folder>
+
++ Request JSON
+    
+    + Headers
+
+            Accept: application/vnd.huddle.data+json
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+
++ Response 200 (application/vnd.huddle.data+json)
+
+    + Headers
+
+            Last-Modified: Tue, 1 Feb 2011 13:18:42 GMT
+
+    + Body
+    
+            {
+                "title" : "My folder",
+                "displayName" : "My folder",
+                "description" : "Folder description",
+                "links" : [
+                  {
+                    "rel" : "self",
+                    "href" : "..."
+                  }, {
+                    "rel" : "parent",
+                    "href" : "..."
+                  }, {
+                    "rel" : "delete",
+                    "href" : "..."
+                  }, {
+                    "rel" : "bulk-delete",
+                    "href" : "..."
+                  }, {
+                    "rel" : "bulk-move",
+                    "href" : "..."
+                  }, {
+                    "rel" : "bulk-download",
+                    "href" : "..."
+                  }, {
+                    "rel" : "edit",
+                    "href" : "..."
+                  }, {
+                    "rel" : "move",
+                    "href" : "..."
+                  }, {
+                    "rel" : "create-folder",
+                    "href" : "..."
+                  }, {
+                    "rel" : "create-document",
+                    "href" : "..."
+                  }, {
+                    "rel" : "permissions",
+                    "href" : "..."
+                  }, {
+                    "rel" : "editPermissions",
+                    "href" : "..."
+                  }, {
+                    "rel" : "workspace-summary",
+                    "href" : "..."
+                  }, {
+                    "rel" : "share",
+                    "href" : "..."
+                  }, {
+                    "rel" : "copy",
+                    "href" : "..."
+                  }, {
+                    "rel" : "document-library-settings",
+                    "href" : "..."
+                  }
+                ],
+                "actor" : {
+                    "name" : "Ian Cooper",
+                    "email" : "ian.cooper@example.com",
+                    "rel" : "owner",
+                    "links" : [
+                      {
+                        "rel" : "self",
+                        "href" : "..."
+                      }, {
+                        "rel" : "avatar",
+                        "href" : "...",
+                        "type" : "image/jpg"
+                      }, {
+                        "rel" : "alternate",
+                        "href" : "...",
+                        "type" : "text/html"
+                      }
+                    ]
+                },
+                "folders" : [
+                    {
+                        "title" : "sub folder",
+                        "description" : "my subfolder",
+                        "links" : [
+                          {
+                            "rel" : "self",
+                            "href" : "..."
+                          }, {
+                            "rel" : "parent",
+                            "href" : "..."
+                          }, {
+                            "rel" : "delete",
+                            "href" : "..."
+                          }, {
+                            "rel" : "bulk-delete",
+                            "href" : "..."
+                          }, {
+                            "rel" : "bulk-move",
+                            "href" : "..."
+                          }, {
+                            "rel" : "bulk-download",
+                            "href" : "..."
+                          }, {
+                            "rel" : "edit",
+                            "href" : "..."
+                          }, {
+                            "rel" : "move",
+                            "href" : "..."
+                          }, {
+                            "rel" : "create-folder",
+                            "href" : "..."
+                          }, {
+                            "rel" : "create-document",
+                            "href" : "..."
+                          }, {
+                            "rel" : "permissions",
+                            "href" : "..."
+                          }, {
+                            "rel" : "editPermissions",
+                            "href" : "..."
+                          }, {
+                            "rel" : "workspace-summary",
+                            "href" : "..."
+                          }, {
+                            "rel" : "share",
+                            "href" : "..."
+                          }, {
+                            "rel" : "copy",
+                            "href" : "..."
+                          }, {
+                            "rel" : "document-library-settings",
+                            "href" : "..."
+                          }
+                        ],
+                        "updated" : "2014-09-22T08:25:43Z",
+                        "created" : "2014-09-22T08:25:43Z"
+                    }
+                ],
+                "documents" : [
+                    {
+                        "title" : "document title",
+                        "description" : "document description",
+                        "links" : [
+                          {
+                            "rel" : "self",
+                            "href" : "..."
+                          }, {
+                            "rel" : "version-history",
+                            "href" : "..."
+                          }, {
+                            "rel" : "comments",
+                            "href" : "...",
+                            "count" : 0
+                          }, {
+                            "rel" : "approvals",
+                            "href" : "..."
+                          }, {
+                            "rel" : "permissions",
+                            "href" : "..."
+                          }, {
+                            "rel" : "share",
+                            "href" : "..."
+                          }, {
+                            "rel" : "audittrail",
+                            "href" : "..."
+                          }, {
+                            "rel" : "printed",
+                            "href" : "..."
+                          }, {
+                            "rel" : "bulk-delete",
+                            "href" : "..."
+                          }, {
+                            "rel" : "previews",
+                            "href" : "..."
+                          }, {
+                            "rel" : "alternate",
+                            "href" : "..."
+                          }, {
+                            "rel" : "alternate",
+                            "href" : "...",
+                            "type" : "text/html"
+                          }, {
+                            "rel" : "shortlink",
+                            "href" : "...",
+                            "type" : "text/html"
+                          }, {
+                            "rel" : "content",
+                            "href" : "...",
+                            "type" : "image/png",
+                            "title" : "title.PNG"
+                          }, {
+                            "rel" : "parent",
+                            "href" : "...",
+                            "title" : "My folder"
+                          }, {
+                            "rel" : "edit",
+                            "href" : "..."
+                          }, {
+                            "rel" : "create-version",
+                            "href" : "..."
+                          }, {
+                            "rel" : "lock",
+                            "href" : "..."
+                          }, {
+                            "rel" : "delete",
+                            "href" : "..."
+                          }, {
+                            "rel" : "move",
+                            "href" : "..."
+                          }, {
+                            "rel" : "copy",
+                            "href" : "..."
+                          }
+                        ]
+                    }
+                ],
+                "created" : "2007-10-10T09:02:17Z",
+                "updated" : "2007-10-10T09:02:17Z"
+            }
 
 ### Create a Subfolder [POST]
 
+This resource supports creating a new sub folder. To create a new sub-folder, POST an empty folder structure to the containing folder's create-folder URI. If the sub folder name supplied is already in the parent folder a number will be appended to the end of the folder name e.g. NewFolder?(1)
+
+If successful, this response will return a folder.
+
+If a folder with the same title already exists within the folder, you will receive a 409 Conflict.
+
+This response uses the standard error codes and returns standard response headers.
+
+
++ Parameters
+    + folderId (integer) ... ID of a folder.
+
++ Request XML
+    + Headers
+
+            Accept: application/vnd.huddle.data+xml
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+
++ Response 201 (application/vnd.huddle.data+xml)
+
+    + Headers
+
+            Location: ...
+
+    + Body
+    
+            <folder xmlns="https://schema.huddle.net/2011/02/" title="My folder" displayName="My folder" description="Folder description">
+                <link rel="self" href="files/folders/12345" />
+                <link rel="parent" href="..." />
+                <link rel="delete" href="..." />
+                <link rel="bulk-delete" href="..." />
+                <link rel="bulk-move" href="..." />
+                <link rel="bulk-download" href="..." />
+                <link rel="edit" href="..." />
+                <link rel="move" href="..." />
+                <link rel="create-folder" href="..." />
+                <link rel="create-document" href="..." />
+                <link rel="permissions" href="..." />
+                <link rel="editPermissions" href="..." />
+                <link rel="workspace-summary" href="..." />
+                <link rel="share" href="..." />
+                <link rel="copy" href="..." />
+                <link rel="document-library-settings" href="..." />
+                <actor name="Ian Cooper" email="ian.cooper@example.com" rel="owner">
+                    <link rel="self" href="..." />
+                    <link rel="avatar" href="..." />
+                    <link rel="alternate" href="..." type="text/html" />
+                </actor>
+                <folders>
+                    <folder title="sub folder" description="my subfolder">
+                        <link rel="self" href="files/folders/12345" />
+                        <link rel="parent" href="..." />
+                        <link rel="delete" href="..." />
+                        <link rel="bulk-delete" href="..." />
+                        <link rel="bulk-move" href="..." />
+                        <link rel="bulk-download" href="..." />
+                        <link rel="edit" href="..." />
+                        <link rel="move" href="..." />
+                        <link rel="create-folder" href="..." />
+                        <link rel="create-document" href="..." />
+                        <link rel="permissions" href="..." />
+                        <link rel="editPermissions" href="..." />
+                        <link rel="workspace-summary" href="..." />
+                        <link rel="share" href="..." />
+                        <link rel="copy" href="..." />
+                        <link rel="document-library-settings" href="..." />
+                        <updated>2014-09-22T08:25:43Z</updated>
+                        <created>2014-09-22T08:25:43Z</created>
+                    </folder>
+                </folders>
+              <documents>
+                <document title="title" description="document description">
+                    <link rel="self" href="..." />
+                    <link rel="version-history" href="..." />
+                    <link rel="comments" href="..." count="0" />
+                    <link rel="approvals" href="..." />
+                    <link rel="permissions" href="..." />
+                    <link rel="share" href="..." />
+                    <link rel="audittrail" href="..." />
+                    <link rel="printed" href="..." />
+                    <link rel="bulk-delete" href="..." />
+                    <link rel="previews" href="..." />
+                    <link rel="alternate" href="..." />
+                    <link rel="alternate" href="..." type="text/html" />
+                    <link rel="shortlink" href="..." type="text/html" />
+                    <link rel="content" href="..." type="image/png" title="title.PNG" />
+                    <link rel="parent" href="..." title="My folder" />
+                    <link rel="edit" href="..." />
+                    <link rel="create-version" href="..." />
+                    <link rel="lock" href="..." />
+                    <link rel="delete" href="..." />
+                    <link rel="move" href="..." />
+                    <link rel="copy" href="..." />
+                </document>
+              </documents>
+              <created>2007-10-10T09:02:17Z</created>
+              <updated>2007-01-01T00:02:03Z</updated>
+            </folder>
+
++ Request JSON
+    
+    + Headers
+
+            Accept: application/vnd.huddle.data+json
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+
++ Response 201 (application/vnd.huddle.data+json)
+
+    + Headers
+
+            Location: ...
+
+    + Body
+    
+            {
+                "title" : "My folder",
+                "displayName" : "My folder",
+                "description" : "Folder description",
+                "links" : [
+                  {
+                    "rel" : "self",
+                    "href" : "..."
+                  }, {
+                    "rel" : "parent",
+                    "href" : "..."
+                  }, {
+                    "rel" : "delete",
+                    "href" : "..."
+                  }, {
+                    "rel" : "bulk-delete",
+                    "href" : "..."
+                  }, {
+                    "rel" : "bulk-move",
+                    "href" : "..."
+                  }, {
+                    "rel" : "bulk-download",
+                    "href" : "..."
+                  }, {
+                    "rel" : "edit",
+                    "href" : "..."
+                  }, {
+                    "rel" : "move",
+                    "href" : "..."
+                  }, {
+                    "rel" : "create-folder",
+                    "href" : "..."
+                  }, {
+                    "rel" : "create-document",
+                    "href" : "..."
+                  }, {
+                    "rel" : "permissions",
+                    "href" : "..."
+                  }, {
+                    "rel" : "editPermissions",
+                    "href" : "..."
+                  }, {
+                    "rel" : "workspace-summary",
+                    "href" : "..."
+                  }, {
+                    "rel" : "share",
+                    "href" : "..."
+                  }, {
+                    "rel" : "copy",
+                    "href" : "..."
+                  }, {
+                    "rel" : "document-library-settings",
+                    "href" : "..."
+                  }
+                ],
+                "actor" : {
+                    "name" : "Ian Cooper",
+                    "email" : "ian.cooper@example.com",
+                    "rel" : "owner",
+                    "links" : [
+                      {
+                        "rel" : "self",
+                        "href" : "..."
+                      }, {
+                        "rel" : "avatar",
+                        "href" : "...",
+                        "type" : "image/jpg"
+                      }, {
+                        "rel" : "alternate",
+                        "href" : "...",
+                        "type" : "text/html"
+                      }
+                    ]
+                },
+                "folders" : [
+                    {
+                        "title" : "sub folder",
+                        "description" : "my subfolder",
+                        "links" : [
+                          {
+                            "rel" : "self",
+                            "href" : "..."
+                          }, {
+                            "rel" : "parent",
+                            "href" : "..."
+                          }, {
+                            "rel" : "delete",
+                            "href" : "..."
+                          }, {
+                            "rel" : "bulk-delete",
+                            "href" : "..."
+                          }, {
+                            "rel" : "bulk-move",
+                            "href" : "..."
+                          }, {
+                            "rel" : "bulk-download",
+                            "href" : "..."
+                          }, {
+                            "rel" : "edit",
+                            "href" : "..."
+                          }, {
+                            "rel" : "move",
+                            "href" : "..."
+                          }, {
+                            "rel" : "create-folder",
+                            "href" : "..."
+                          }, {
+                            "rel" : "create-document",
+                            "href" : "..."
+                          }, {
+                            "rel" : "permissions",
+                            "href" : "..."
+                          }, {
+                            "rel" : "editPermissions",
+                            "href" : "..."
+                          }, {
+                            "rel" : "workspace-summary",
+                            "href" : "..."
+                          }, {
+                            "rel" : "share",
+                            "href" : "..."
+                          }, {
+                            "rel" : "copy",
+                            "href" : "..."
+                          }, {
+                            "rel" : "document-library-settings",
+                            "href" : "..."
+                          }
+                        ],
+                        "updated" : "2014-09-22T08:25:43Z",
+                        "created" : "2014-09-22T08:25:43Z"
+                    }
+                ],
+                "documents" : [
+                    {
+                        "title" : "document title",
+                        "description" : "document description",
+                        "links" : [
+                          {
+                            "rel" : "self",
+                            "href" : "..."
+                          }, {
+                            "rel" : "version-history",
+                            "href" : "..."
+                          }, {
+                            "rel" : "comments",
+                            "href" : "...",
+                            "count" : 0
+                          }, {
+                            "rel" : "approvals",
+                            "href" : "..."
+                          }, {
+                            "rel" : "permissions",
+                            "href" : "..."
+                          }, {
+                            "rel" : "share",
+                            "href" : "..."
+                          }, {
+                            "rel" : "audittrail",
+                            "href" : "..."
+                          }, {
+                            "rel" : "printed",
+                            "href" : "..."
+                          }, {
+                            "rel" : "bulk-delete",
+                            "href" : "..."
+                          }, {
+                            "rel" : "previews",
+                            "href" : "..."
+                          }, {
+                            "rel" : "alternate",
+                            "href" : "..."
+                          }, {
+                            "rel" : "alternate",
+                            "href" : "...",
+                            "type" : "text/html"
+                          }, {
+                            "rel" : "shortlink",
+                            "href" : "...",
+                            "type" : "text/html"
+                          }, {
+                            "rel" : "content",
+                            "href" : "...",
+                            "type" : "image/png",
+                            "title" : "title.PNG"
+                          }, {
+                            "rel" : "parent",
+                            "href" : "...",
+                            "title" : "My folder"
+                          }, {
+                            "rel" : "edit",
+                            "href" : "..."
+                          }, {
+                            "rel" : "create-version",
+                            "href" : "..."
+                          }, {
+                            "rel" : "lock",
+                            "href" : "..."
+                          }, {
+                            "rel" : "delete",
+                            "href" : "..."
+                          }, {
+                            "rel" : "move",
+                            "href" : "..."
+                          }, {
+                            "rel" : "copy",
+                            "href" : "..."
+                          }
+                        ]
+                    }
+                ],
+                "created" : "2007-10-10T09:02:17Z",
+                "updated" : "2007-10-10T09:02:17Z"
+            }
+    
 ### Delete a Folder [DELETE]
+
+This resource supports deleting a folder. If the authenticated user has permission to delete a folder, the folder resource will contain a Link with a @rel value of delete. To delete a folder, send a DELETE request to the delete URI.
+
+If successful, this method will return an empty response with an OK status code and a link header to the parent folder.
+
+This response uses the standard error codes and returns standard response headers.
+
++ Parameters
+    + folderId (integer) ... ID of a folder.
+
++ Request
+    + Headers
+
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+
++ Response 200
+    + Headers
+            
+            Link: ...
+
+## Folder Documents [/files/folders/{folderId}/documents]
+
+### Create a Document [POST]
+
+This resource supports creating a new Document. If the authenticated user has permission to create a new document within a folder, the folder resource will contain a Link with a @rel value of create-document.
+
+Uploading files via the Huddle API is a two-step process.
+
+To create a new document, issue a POST request to the create-document URI with an empty Document.
+Once a document has been created, you may upload content to its upload URI.
+For more information on uploading files, see UploadingDocuments.
+
+* Title - The title of the document.
+* Description - The description of the document.
+* Extension - A extension for the document (optional). This property is optional but recommended. This helps us determine useful information about duplicate file names. See Response for more info.
+
+If successful, this operation will return a 201 Created with a Location header pointing to your new document, and a representation of your new document in the body.
+
+If @extension is supplied and a document with the same title and the same extension already exists within the folder, you will receive a 409 Conflict.
+
+The new document will advertise an upload uri to which you can upload content. For more information see UploadingDocuments.
+
++ Parameters
+    + folderId (integer) ... ID of a folder.
+
++ Request XML
+    + Headers
+
+            Accept: application/vnd.huddle.data+xml
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+            
+    + Body 
+    
+            <document
+                 title="TPS report May 2010" 
+                 description="relentlessly mundane and enervating."
+                 extension=".doc" 
+            />
+
++ Response 201 (application/vnd.huddle.data+xml)
+
+    + Headers
+
+            Location: ...
+
+    + Body
+    
+            <document title="TPS report May 2010" description="relentlessly mundane and enervating.">
+              <link rel="self" href="..." />
+              <link rel="parent" href="..." title="..."/>
+              <link rel="edit" href="..." />
+              <link rel="move" href="..." />
+              <link rel="delete" href="..." />
+              <link rel="content" href="..." title="..." type="..." />
+              <link rel="lock" href="..." />
+              <link rel="version-history" href="..." />
+              <link rel="create-version" href="..." />
+              <link rel="comments" href="..." count="2" />
+              <link rel="approvals" href="..." />
+              <link rel="permissions" href="..." />
+              <link rel="share" href="..." />
+              <link rel="previews" href="..." />
+              <link rel="alternate" href="..." />
+              <link rel="alternate" href="..." type="text/html" />
+              <link rel="shortlink" href="..." type="text/html" />
+              <link rel="copy" href="..." />
+              <link rel="audittrail" href="..." />
+              <link rel="printed" href="..." />
+              <link rel="make-offline" href="..." />
+              <link rel="publish" href="..." />
+              <link rel="publications" href="..." />
+              <actor name="Peter Gibson" email="peter.gibson@example.com" rel="owner">
+                <link rel="self" href="..." />
+                <link rel="avatar" href="..." type="image/jpg" />
+                <link rel="alternate" href="..." type="text/html" />
+              </actor>
+              <actor name="Barry Potter" email="barry.potter@example.com" rel="updated-by">
+                <link rel="self" href="..." />
+                <link rel="avatar" href="..." type="image/jpg" />
+                <link rel="alternate" href="..." type="text/html" />
+              </actor>
+              <size>19475</size>
+              <version>98</version>
+              <created>2007-10-10T09:02:17Z</created>
+              <updated>2011-10-10T09:02:17Z</updated>
+              <processingStatus>Complete</processingStatus>
+              <views>9</views>
+              <workspace title="My workspace">
+                <link rel="self" href="..." />
+              </workspace>
+              <thumbnails>
+                <thumbnail type=”medium”>
+                  <link rel="content" href="..." />
+                </thumbnail>
+              </thumbnails>
+              <publications>
+                <link rel="bookmark" href="..." />
+                <publishedDate>2014-06-15T09:43:17Z</publishedDate>
+                <documentVersion title="My amazing document is amazing">
+                   <link rel="self" href="..." />
+                   <version>2</version>
+                   <contentType>application/pdf</contentType>
+                </documentVersion>
+                <scope>Public</scope>
+              </publications>
+            </document>
+
++ Request JSON
+    
+    + Headers
+
+            Accept: application/vnd.huddle.data+json
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+            
+    + Body 
+    
+            {
+                "title" : "TPS report May 2010",
+                "description" : "relentlessly mundane and enervating.",
+                "extension" : ".doc"
+            }
+
++ Response 201 (application/vnd.huddle.data+json)
+
+    + Headers
+
+            Location: ...
+
+    + Body
+    
+            {
+                "title" : "TPS report May 2010",
+                "description" : "relentlessly mundane and enervating.",
+                "links" : [
+                  {
+                    "rel" : "self",
+                    "href" : "..."
+                  }, {
+                    "rel" : "parent",
+                    "href" : "..."
+                  }, {
+                    "rel" : "edit",
+                    "href" : "..."
+                  }, {
+                    "rel" : "move",
+                    "href" : "..."
+                  }, {
+                    "rel" : "delete",
+                    "href" : "..."
+                  }, {
+                    "rel" : "content",
+                    "href" : "...",
+                    "title" : "...",
+                    "type" : "..."
+                  }, {
+                    "rel" : "lock",
+                    "href" : "..."
+                  }, {
+                    "rel" : "version-history",
+                    "href" : "..."
+                  }, {
+                    "rel" : "create-version",
+                    "href" : "..."
+                  }, {
+                    "rel" : "comments",
+                    "href" : "..."
+                  }, {
+                    "rel" : "approvals",
+                    "href" : "..."
+                  }, {
+                    "rel" : "permissions",
+                    "href" : "..."
+                  }, {
+                    "rel" : "share",
+                    "href" : "..."
+                  }, {
+                    "rel" : "previews",
+                    "href" : "..."
+                  }, {
+                    "rel" : "alternative",
+                    "href" : "..."
+                  }, {
+                    "rel" : "alternative",
+                    "href" : "...",
+                    "type" : "text/html"
+                  }, {
+                    "rel" : "shortlink",
+                    "href" : "...",
+                    "type" : "text/html"
+                  }, {
+                    "rel" : "copy",
+                    "href" : "..."
+                  }, {
+                    "rel" : "audittrail",
+                    "href" : "..."
+                  }, {
+                    "rel" : "printed",
+                    "href" : "..."
+                  }, {
+                    "rel" : "make-offline",
+                    "href" : "..."
+                  }, {
+                    "rel" : "publish",
+                    "href" : "..."
+                  }, {
+                    "rel" : "publications",
+                    "href" : "..."
+                  }
+                ],
+                "actors" : [
+                  {
+                    "name" : "Peter Gibson",
+                    "email" : "peter.gibson@example.com",
+                    "rel" : "owner",
+                    "links" : [
+                      {
+                        "rel" : "self",
+                        "href" : "..."
+                      }, {
+                        "rel" : "avatar",
+                        "href" : "...",
+                        "type" : "image/jpg"
+                      }, {
+                        "rel" : "alternate",
+                        "href" : "...",
+                        "type" : "text/html"
+                      }
+                    ]
+                  },
+                  {
+                    "name" : "Barry Potter",
+                    "email" : "arry.potter@example.com",
+                    "rel" : "updated-by",
+                    "links" : [
+                      {
+                        "rel" : "self",
+                        "href" : "..."
+                      }, {
+                        "rel" : "avatar",
+                        "href" : "...",
+                        "type" : "image/jpg"
+                      }, {
+                        "rel" : "alternate",
+                        "href" : "...",
+                        "type" : "text/html"
+                      }
+                    ]
+                  }
+                ],
+                "size" : 19475,
+                "version" : 98,
+                "created" : "2007-10-10T09:02:17Z",
+                "updated" : "2007-10-10T09:02:17Z",
+                "processingStatus" : "Complete",
+                "views" : 9,
+                "workspace" : {
+                  "title" : "My workspace",
+                  "links": [
+                    {
+                      "rel": "self",
+                      "href": "..."
+                    }
+                  ]
+                },
+                "thumbnails" : [
+                  {
+                    "type" : "medium",
+                    "links" : [
+                      {
+                        "rel" : "content",
+                        "href" : "..."
+                      }
+                    ]
+                  }
+                ],
+                "publications" : {
+                  "links" : [
+                    {
+                      "rel" : "bookmark",
+                      "href" : "..."
+                    }
+                  ],
+                  "publishedDate" : "2014-06-15T09:43:17Z",
+                  "documentVersion" : {
+                    "title" : "My amazing document is amazing",
+                    "links" : [
+                      {
+                        "rel" : "self",
+                        "href" : "..."
+                      }
+                    ],
+                    "version" : 2,
+                    "contentType" : "application/pdf"
+                  },
+                  "scope" : "Public"
+                }
+            }
 
 ## Restore Folder [/files/folders/{folderId}/restore]
 
-### Restoring a Folder
+This resource supports restoring a folder. If the authenticated user can restore a folder, /restore can be appended to the folder resource URI to restore URI. To restore the folder, issue a PUT request to the restore URI.
+
+All documents that were deleted with the folder are also restored.
+
+### Restoring a Folder [PUT]
+
+If successful, this operation will return a 204 No content, with a link header giving the location of the restored folder.
+
+This response uses the standard error codes and returns standard response headers.
+
++ Parameters
+    + folderId (integer) ... ID of a folder.
+
++ Request
+    + Headers
+
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+
++ Response 200
+    + Headers
+            
+            Location: ...
 
 ## Edit Folder [/files/folders/{folderId}/edit]
+
+If the authenticated user is authorized to edit a folder, it will advertise a link with a @rel value of edit. To update folder metadata submit a PUT request to this URI with the editable fields of the folder. For an overview of editing resource in Huddle see editing resources.
 
 ### Retrieve Editable Properties [GET]
 
 ### Edit Folder Title, Description and Location [PUT]
 
+In this example we update the folder's title and description using the URI advertised in the folder resource.
+
+If a folder with the same title already exists within the folder, you will receive a 409 Conflict.
+
+If successful, this operation will return a 204 No content, with a link header giving the location of the updated folder.
+
+This response uses the standard error codes and returns standard response headers.
+
+This resource supports moving a folder to a new location. If the authenticated user can move a folder, the folder resource will advertise a link with a @rel value of move. Note that the @href value of the move link is the same as the value for the edit link, since moving an item is in fact an edit operation. To move a folder, PUT a new link to this move uri, with a @rel value of parent, and an @href value pointing to the new parent folder. For an overview of editing resource in Huddle see editing resources.
+
++ Parameters
+    + folderId (integer) ... ID of a folder.
+
++ Request XML
+    + Headers
+
+            Accept: application/vnd.huddle.data+xml
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+            Content-Length: 102
+    
+    + Body
+    
+            <folder xmlns="http://schema.huddle.net/2011/02/" title="new title" description="new description" >
+                <link rel="parent" href="..." />
+            </folder>
+
++ Response 204
+
+    + Headers
+
+            Link: ...
+
+            
++ Request JSON
+    
+    + Headers
+
+            Accept: application/vnd.huddle.data+json
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+            Content-Length: 102
+            
+    + Body
+    
+            {
+                "title" : "new title",
+                "description" : "new description",
+                "links" : [
+                    {
+                        "rel" : "parent",
+                        "href" : "..."
+                    }
+                ]
+            }
+
++ Response 204
+
+    + Headers
+
+            Link: ...
+    
 ## Copy Folder [/files/folders/{folderId}/copy]
 
 ### Copy a Folder [POST]
 
-
 # Group Documents
 Documents represent files stored within Huddle, such as spreadsheets or images. Documents also have metadata for version history and commenting.
-
-## Documents [/files/folders/{folderId}/documents]
-
-### Create a Document [POST]
 
 ## Document [/files/documents/{documentId}]
 
