@@ -1364,7 +1364,56 @@ This response uses the standard error codes and returns standard response header
 
 If the authenticated user is authorized to edit a folder, it will advertise a link with a @rel value of edit. To update folder metadata submit a PUT request to this URI with the editable fields of the folder. For an overview of editing resource in Huddle see editing resources.
 
+Editable resources will advertise a link with a @rel value of edit. A GET request to this URI should return a subset of the resource data which you can modify locally.
+
+To persist your changes, make a PUT request back to the edit URI with the modified resource.
+
+Clients must include all portions of an editable resource in order to avoid unintended consequences. Clients should expect the schema of an editable resource to be extended.
+
 ### Retrieve Editable Properties [GET]
+
+The user wishes to change the description of a folder. First they retrieve the edit uri of the folder.
+
++ Parameters
+    + folderId (integer) ... ID of a folder.
+
++ Request XML
+    + Headers
+
+            Accept: application/vnd.huddle.data+xml
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+
++ Response 200 (application/vnd.huddle.data+xml)
+
+    + Body
+    
+        <folder title="my folder" description="ORIGINAL DESCRIPTION">
+          <link rel="parent" href="..." />
+        </folder>
+
+
++ Request JSON
+
+    + Headers
+
+            Accept: application/vnd.huddle.data+json
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+
++ Response 200 (application/vnd.huddle.data+json)
+
+    + Body
+    
+            {
+                "title" : "my folder",
+                "description" : "ORIGINAL DESCRIPTION",
+                "links" : [
+                    {
+                        "rel" : "parent"
+                        "href" : "..."
+                    }
+                ]
+                
+            }
 
 ### Edit Folder Title, Description and Location [PUT]
 
@@ -1494,6 +1543,8 @@ It should be noted that this endpoint copies the top-level folder synchronously,
     + Headers
 
             Location: ...
+
+
 
 # Group Documents
 Documents represent files stored within Huddle, such as spreadsheets or images. Documents also have metadata for version history and commenting.
