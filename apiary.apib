@@ -9,6 +9,8 @@ This is the documentation for the files-related APIs that Huddle provides.
 
 For site wide API standards and conventions see: [INSERT LINK TO OVERALL API DOCS]
 
+
+
 # Group Folders
 
 Folders are used to organise, group, and protect documents that are stored in Huddle.
@@ -16,6 +18,7 @@ Folders are used to organise, group, and protect documents that are stored in Hu
 Folders in Huddle are conceptually similar to folders on a hard drive in that folders can contain other folders as well as documents.
 
 Access controls can be set on a folder to allow different groups of people to read, write, and delete those documents.
+
 
 ## Root Folder [/files/workspaces/{workspaceId}/folders/root{?projection}]
 
@@ -343,6 +346,7 @@ This resource allows a user to retrieve the root folder of a workspace. The resp
                 "created" : "2007-10-10T09:02:17Z",
                 "updated" : "2007-10-10T09:02:17Z"
             }
+
 
 ## Folder [/files/folders/{folderId}{?projection}]
 
@@ -1030,6 +1034,7 @@ This response uses the standard error codes and returns standard response header
             
             Link: ...
 
+
 ## Folder Documents [/files/folders/{folderId}/documents]
 
 ### Create a Document [POST]
@@ -1328,6 +1333,7 @@ The new document will advertise an upload uri to which you can upload content. F
                 }
             }
 
+
 ## Restore Folder [/files/folders/{folderId}/restore]
 
 This resource supports restoring a folder. If the authenticated user can restore a folder, /restore can be appended to the folder resource URI to restore URI. To restore the folder, issue a PUT request to the restore URI.
@@ -1352,6 +1358,7 @@ This response uses the standard error codes and returns standard response header
     + Headers
             
             Location: ...
+
 
 ## Edit Folder [/files/folders/{folderId}/edit]
 
@@ -1420,10 +1427,73 @@ This resource supports moving a folder to a new location. If the authenticated u
     + Headers
 
             Link: ...
+
     
 ## Copy Folder [/files/folders/{folderId}/copy]
 
+The copy folder resource supports making a copy of a folder. This operation also copies the folder's sub-folders and documents.
+
+In order to copy a folder, the user must have write access to both the source folder and target folder. If any of the folder's sub-folders or documents cannot be copied, they will be silently skipped. The remaining sub-folders and documents will still be copied.
+
+The folder copy will have the same title and description as the original. If a folder with the same title already exists in the target folder, then the copied folder will be re-titled. For example, a copy of the folder "My Folder" would be re-titled "My Folder (1)".
+
 ### Copy a Folder [POST]
+
+To copy a folder, first retrieve the folder to get its copy link, then POST to the folder's copy URI, including a link to the target folder in the body of the request (see Example below). Folders can be copied to the same folder, to another folder in the same workspace, or to a folder in another workspace.
+
+If the copy operation is successful, the copy folder endpoint will return a 201 Created response, along with the URI of the new folder copy in the Location header.
+
+It should be noted that this endpoint copies the top-level folder synchronously, but the folder's sub-folders and documents are copied asynchronously.
+
++ Parameters
+    + folderId (integer) ... ID of a folder.
+
++ Request XML
+    + Headers
+
+            Accept: application/vnd.huddle.data+xml
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+    
+    + Body
+            
+            <copyFolder>
+              <targetFolder>
+                <link rel="self" href=".../files/folders/456" />  
+              </targetFolder>
+            </copyFolder>
+
++ Response 201 (application/vnd.huddle.data+xml)
+
+    + Headers
+    
+            Location: ...
+
+
++ Request JSON
+
+    + Headers
+
+            Accept: application/vnd.huddle.data+json
+            Authorization: OAuth2 frootymcnooty/vonbootycherooty
+            
+    + Body
+    
+            {
+                "targetFolder" : {
+                    "links" : [
+                        {
+                            "rel" : "self",
+                            "href" : "..."
+                        }
+                    ]
+                }
+            }
+
++ Response 201 (application/vnd.huddle.data+json)
+
+    + Headers
+
+            Location: ...
 
 # Group Documents
 Documents represent files stored within Huddle, such as spreadsheets or images. Documents also have metadata for version history and commenting.
